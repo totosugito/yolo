@@ -19,33 +19,35 @@ import axios from "axios";
 class FrontPageView extends React.Component {
     render() {
         const _viewShowSelectedData = () => {
-            // if (this.state.allCompleted === false || this.state.selectedData === undefined) {
-            //     return (<div/>)
-            // }
-            //
-            // if (this.state.selectedData.complete === false) {
-            //     return (<div/>)
-            // }
+            if (this.state.allCompleted === false || this.state.selectedData === undefined) {
+                return (<div/>)
+            }
+
+            if (this.state.selectedData.complete === false) {
+                return (<div/>)
+            }
 
             return (
                 <Grid container direction="row">
                     <Grid xs={6}>
-                        {/*<div>{JSON.stringify(this.state.selectedData.result.bbox, null, 4)}</div>*/}
-                        {/*<div>{JSON.stringify({a:10, b:3}, null, 4)}</div>*/}
                         <TextField xs={12}
-                            id="outlined-multiline-static"
-                            label="Multiline"
-                            multiline
-                            rows={20}
-                            variant="outlined"
-                            defaultValue={JSON.stringify({a:10, b:3}, null, 4)}
+                                   id="outlined-multiline-static"
+                                   label=""
+                                   multiline
+                                   inputProps={
+                                       {readOnly: true,}
+                                   }
+                                   rows={30}
+                                   variant="outlined"
+                                   style={{width: "100%", height: "100%"}}
+                                   value={JSON.stringify(this.state.selectedData.result.bbox, null, 3)}
                         />
                     </Grid>
-                    {/*<Grid xs={6}>*/}
-                    {/*         <Box component="img"*/}
-                    {/*              sx={styles_.image_proc_}*/}
-                    {/*              src={this.state.selectedData.result.file_name}/>*/}
-                    {/*</Grid>*/}
+                    <Grid xs={6}>
+                        <Box component="img"
+                             sx={styles_.image_proc_}
+                             src={this.state.selectedData.result.file_name}/>
+                    </Grid>
                 </Grid>
             );
         }
@@ -115,19 +117,20 @@ class FrontPageView extends React.Component {
             inputParam: [],
             datas: [],
             allCompleted: false,
-            selectedData: undefined
+            selectedData: undefined,
         }
     }
 
     onChangeInputFiles = (v) => {
         let tmp_data = []
         for (let i = 0; i < v.target.files.length; i++) {
-            tmp_data.push({id: i + 1, task_id: "file: " + v.target.files[i].name, status: "~", view: false})
+            tmp_data.push({id: i + 1, task_id: "file: " + v.target.files[i].name, status: "", view: false})
         }
 
         this.setState({
             inputFiles: v.target.files,
-            datas: tmp_data
+            datas: tmp_data,
+            selectedData: undefined
         })
     };
 
@@ -205,6 +208,7 @@ class FrontPageView extends React.Component {
                     })
                 })
                 .catch((error) => {
+                    clearInterval(this.procInterval);
                 })
         }
 

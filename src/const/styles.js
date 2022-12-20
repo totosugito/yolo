@@ -32,6 +32,6 @@ export const styles_ = {
         minHeight: {xs: 30, md: 40, lg: 50},
     },
     image_proc_: {
-
+        width: "100%"
     },
 }
